@@ -3,19 +3,24 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
 
+// Routes
 const noteRoutes = require("./routes/noteRoutes");
 app.use("/api/notes", noteRoutes);
 
-// MongoDB Atlas
-const MONGO_URL = "mongodb+srv://honeych0013_db_user:honey_notes@cluster0.gr2ah8y.mongodb.net/notesDB?retryWrites=true&w=majority";
-
+// MongoDB connection
 mongoose
-  .connect(MONGO_URL)
+  .connect(process.env.MONGO_URL)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log("MongoDB error:", err));
 
-const PORT = 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// IMPORTANT: Render PORT
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
